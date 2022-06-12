@@ -1,2 +1,3 @@
-# merge-sort
-Merge sort implementation in Golang
+# Test out goroutines
+
+Some basic tasks to check out goroutines implementation.
