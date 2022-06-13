@@ -4,8 +4,6 @@ Implement top-down merge sort using goroutine to fasten up the execution.
 
 package main
 
-import "fmt"
-
 func merge(l1 []int, l2 []int) []int {
 	var output []int
 	p1, p2 := 0, 0
@@ -28,40 +26,32 @@ func merge(l1 []int, l2 []int) []int {
 	return output
 }
 
-func mergeSort(l []int) []int {
+func MergeSort(l []int) []int {
 	n := len(l)
 	if n < 2 {
 		return l
 	}
-	
+
 	ch_left, ch_right := make(chan []int), make(chan []int)
 
 	mid := int(n / 2)
-	
+
 	go func() {
-		ch_left <- mergeSort(l[:mid])
+		ch_left <- MergeSort(l[:mid])
 		close(ch_left)
 	}()
-	
+
 	go func() {
-		ch_right <- mergeSort(l[mid:])
+		ch_right <- MergeSort(l[mid:])
 		close(ch_right)
-	}() 
-	
+	}()
+
 	for {
-		left, ok_left := <- ch_left
-		right, ok_right := <- ch_right
-		
+		left, ok_left := <-ch_left
+		right, ok_right := <-ch_right
+
 		if ok_left && ok_right {
 			return merge(left, right)
-		}	
+		}
 	}
-}
-
-func main() {
-	l1 := []int{1, 3, 5, 4, 6, 8, 9, 10, 2, 7}
-	fmt.Println(mergeSort(l1))
-	
-	l2 := []int{}
-	fmt.Println(mergeSort(l2))
 }
