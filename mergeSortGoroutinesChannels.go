@@ -4,7 +4,7 @@ Implement top-down merge sort using goroutine to fasten up the execution.
 
 package main
 
-func merge(l1 []int, l2 []int) []int {
+func mergeChannels(l1 []int, l2 []int) []int {
 	var output []int
 	p1, p2 := 0, 0
 	for p1 < len(l1) && p2 < len(l2) {
@@ -26,7 +26,7 @@ func merge(l1 []int, l2 []int) []int {
 	return output
 }
 
-func MergeSort(l []int) []int {
+func MergeSortChannels(l []int) []int {
 	n := len(l)
 	if n < 2 {
 		return l
@@ -37,12 +37,12 @@ func MergeSort(l []int) []int {
 	mid := int(n / 2)
 
 	go func() {
-		ch_left <- MergeSort(l[:mid])
+		ch_left <- MergeSortChannels(l[:mid])
 		close(ch_left)
 	}()
 
 	go func() {
-		ch_right <- MergeSort(l[mid:])
+		ch_right <- MergeSortChannels(l[mid:])
 		close(ch_right)
 	}()
 
@@ -51,7 +51,7 @@ func MergeSort(l []int) []int {
 		right, ok_right := <-ch_right
 
 		if ok_left && ok_right {
-			return merge(left, right)
+			return mergeChannels(left, right)
 		}
 	}
 }

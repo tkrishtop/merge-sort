@@ -18,11 +18,16 @@ func homemadeBenchmark(N int) {
 	fmt.Println("Elapsed time to sort without goroutines:", elapsed)
 
 	start = time.Now()
-	MergeSort(l)
+	MergeSortChannels(l)
 	elapsed = time.Since(start)
-	fmt.Println("Elapsed time to sort using goroutines:", elapsed)
+	fmt.Println("Elapsed time to sort using goroutines / channels:", elapsed)
+
+	start = time.Now()
+	MergeSortWaitGroups(l)
+	elapsed = time.Since(start)
+	fmt.Println("Elapsed time to sort using goroutines / waitGroups:", elapsed)
 }
 
 func main() {
-	homemadeBenchmark(100000)
+	homemadeBenchmark(10000000)
 }
