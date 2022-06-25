@@ -1,12 +1,13 @@
-package main
+package mergesort
 
 import (
-	"fmt"
 	"math/rand"
 	mergesort "mergesort/pkg"
 	"mergesort/pkg/mergesort/channel"
 	"mergesort/pkg/mergesort/synchronous"
 	"mergesort/pkg/mergesort/waitgroups"
+	"strconv"
+	"testing"
 	"time"
 )
 
@@ -17,9 +18,11 @@ func generateRandomArray(N int) []int {
 	return lst
 }
 
-func main() {
+func BenchmarkMergeSort(b *testing.B) {
 	var N = 100000
 	var lst = generateRandomArray(N)
+
+	b.Log("Benchmark, array size = ", N)
 
 	// define a slice of functions
 	var sorters = []mergesort.SortFunc{
@@ -29,9 +32,12 @@ func main() {
 	}
 
 	for idx, exec := range sorters {
-		start := time.Now()
-		exec.MergeSort(lst)
-		elapsed := time.Since(start)
-		fmt.Println("Elapsed time to sort:", idx, elapsed)
+		b.Run("sorter-"+strconv.Itoa(idx),
+			func(b *testing.B) {
+				for i := 0; i < b.N; i++ {
+					exec.MergeSort(lst)
+				}
+			},
+		)
 	}
 }

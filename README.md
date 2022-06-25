@@ -42,6 +42,9 @@ Elapsed time to sort using goroutines / channels: 9.448487501s
 Elapsed time to sort using goroutines / waitGroups: 7.567289726s
 ```
 
+```
+go test -bench ^BenchmarkMergeSort
+```
 
 ## Homemade Benchmarks
 ```

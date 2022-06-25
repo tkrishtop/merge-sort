@@ -1,9 +1,6 @@
-/*
-Implement top-down merge sort.
-*/
-package main
+package mergesort
 
-func mergeNoGoroutines(l1 []int, l2 []int) []int {
+func Merge(l1 []int, l2 []int) []int {
 	var output []int
 	p1, p2 := 0, 0
 	for p1 < len(l1) && p2 < len(l2) {
@@ -23,16 +20,4 @@ func mergeNoGoroutines(l1 []int, l2 []int) []int {
 	}
 
 	return output
-}
-
-func MergeSortNoGoroutines(l []int) []int {
-	n := len(l)
-	if n < 2 {
-		return l
-	}
-
-	mid := int(n / 2)
-	left := MergeSortNoGoroutines(l[:mid])
-	right := MergeSortNoGoroutines(l[mid:])
-	return mergeNoGoroutines(left, right)
 }
