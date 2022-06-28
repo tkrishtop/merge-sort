@@ -28,10 +28,16 @@ func main() {
 		waitgroups.MergeSort,
 	}
 
+	var names = []string{
+		"synchronous",
+		"channel",
+		"waitgroups",
+	}
+
 	for idx, exec := range sorters {
 		start := time.Now()
 		exec.MergeSort(lst)
 		elapsed := time.Since(start)
-		fmt.Println("Elapsed time to sort:", idx, elapsed)
+		fmt.Println("Elapsed time to sort:", names[idx], elapsed)
 	}
 }

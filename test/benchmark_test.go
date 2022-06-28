@@ -6,7 +6,6 @@ import (
 	"mergesort/pkg/mergesort/channel"
 	"mergesort/pkg/mergesort/synchronous"
 	"mergesort/pkg/mergesort/waitgroups"
-	"strconv"
 	"testing"
 	"time"
 )
@@ -31,8 +30,14 @@ func BenchmarkMergeSort(b *testing.B) {
 		waitgroups.MergeSort,
 	}
 
+	var names = []string{
+		"synchronous",
+		"channel",
+		"waitgroups",
+	}
+
 	for idx, exec := range sorters {
-		b.Run("sorter-"+strconv.Itoa(idx),
+		b.Run("sorter-"+names[idx],
 			func(b *testing.B) {
 				for i := 0; i < b.N; i++ {
 					exec.MergeSort(lst)
