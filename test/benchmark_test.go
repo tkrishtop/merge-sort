@@ -6,6 +6,7 @@ import (
 	"mergesort/pkg/mergesort/channel"
 	"mergesort/pkg/mergesort/synchronous"
 	"mergesort/pkg/mergesort/waitgroups"
+	"strconv"
 	"testing"
 	"time"
 )
@@ -21,26 +22,31 @@ func BenchmarkMergeSort(b *testing.B) {
 	var N = 100000
 	var lst = generateRandomArray(N)
 
-	b.Log("Benchmark, array size = ", N)
-
-	// define a slice of functions
-	var sorters = []mergesort.SortFunc{
-		synchronous.MergeSort,
-		channel.MergeSort,
-		waitgroups.MergeSort,
+	type namedSortFunc struct {
+		name     string
+		function mergesort.SortFunc
 	}
 
-	var names = []string{
-		"synchronous",
-		"channel",
-		"waitgroups",
+	var sorters = []namedSortFunc{
+		{
+			name:     "synchronous",
+			function: synchronous.MergeSort,
+		},
+		{
+			name:     "channel",
+			function: channel.MergeSort,
+		},
+		{
+			name:     "waitgroups",
+			function: waitgroups.MergeSort,
+		},
 	}
 
-	for idx, exec := range sorters {
-		b.Run("sorter-"+names[idx],
+	for _, sorter := range sorters {
+		b.Run(sorter.name+" tested on array of size "+strconv.Itoa(N),
 			func(b *testing.B) {
 				for i := 0; i < b.N; i++ {
-					exec.MergeSort(lst)
+					sorter.function(lst)
 				}
 			},
 		)

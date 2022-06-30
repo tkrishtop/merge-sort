@@ -20,24 +20,32 @@ func generateRandomArray(N int) []int {
 func main() {
 	var N = 100000
 	var lst = generateRandomArray(N)
+	fmt.Println("Testing on array of size", N)
 
-	// define a slice of functions
-	var sorters = []mergesort.SortFunc{
-		synchronous.MergeSort,
-		channel.MergeSort,
-		waitgroups.MergeSort,
+	type namedSortFunc struct {
+		name     string
+		function mergesort.SortFunc
 	}
 
-	var names = []string{
-		"synchronous",
-		"channel",
-		"waitgroups",
+	var sorters = []namedSortFunc{
+		{
+			name:     "synchronous",
+			function: synchronous.MergeSort,
+		},
+		{
+			name:     "channel",
+			function: channel.MergeSort,
+		},
+		{
+			name:     "waitgroups",
+			function: waitgroups.MergeSort,
+		},
 	}
 
-	for idx, exec := range sorters {
+	for _, sorter := range sorters {
 		start := time.Now()
-		exec.MergeSort(lst)
+		sorter.function.MergeSort(lst)
 		elapsed := time.Since(start)
-		fmt.Println("Elapsed time to sort:", names[idx], elapsed)
+		fmt.Println("Elapsed time to sort:", sorter.name, elapsed)
 	}
 }
