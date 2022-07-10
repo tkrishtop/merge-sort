@@ -13,7 +13,7 @@ func MergeSort(l []int) []int {
 
 	// create a new group
 	// that would wait for two goroutines
-	wg := new(sync.WaitGroup)
+	wg := sync.WaitGroup{}
 	wg.Add(2)
 
 	mid := int(n / 2)

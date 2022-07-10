@@ -7,6 +7,7 @@ import (
 	"mergesort/pkg/mergesort/channel"
 	"mergesort/pkg/mergesort/synchronous"
 	"mergesort/pkg/mergesort/waitgroups"
+	"mergesort/pkg/mergesort/workerpool"
 	"time"
 )
 
@@ -18,7 +19,7 @@ func generateRandomArray(N int) []int {
 }
 
 func main() {
-	var N = 100000
+	var N = 1000
 	var lst = generateRandomArray(N)
 	fmt.Println("Testing on array of size", N)
 
@@ -39,6 +40,10 @@ func main() {
 		{
 			name:     "waitgroups",
 			function: waitgroups.MergeSort,
+		},
+		{
+			name:     "workerpool",
+			function: workerpool.MergeSort,
 		},
 	}
 
