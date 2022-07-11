@@ -4,9 +4,10 @@ import (
 	"math/rand"
 	mergesort "mergesort/pkg"
 	"mergesort/pkg/mergesort/channel"
+	"mergesort/pkg/mergesort/mix_channel"
+	"mergesort/pkg/mergesort/mix_waitgroups"
 	"mergesort/pkg/mergesort/synchronous"
 	"mergesort/pkg/mergesort/waitgroups"
-	"mergesort/pkg/mergesort/workerpool"
 	"strconv"
 	"testing"
 	"time"
@@ -20,7 +21,7 @@ func generateRandomArray(N int) []int {
 }
 
 func BenchmarkMergeSort(b *testing.B) {
-	var N = 1000
+	var N = 10000
 	var lst = generateRandomArray(N)
 
 	type namedSortFunc struct {
@@ -42,8 +43,12 @@ func BenchmarkMergeSort(b *testing.B) {
 			function: waitgroups.MergeSort,
 		},
 		{
-			name:     "workerpool",
-			function: workerpool.MergeSort,
+			name:     "mix_channel",
+			function: mix_channel.MergeSort,
+		},
+		{
+			name:     "mix_waitgroups",
+			function: mix_waitgroups.MergeSort,
 		},
 	}
 

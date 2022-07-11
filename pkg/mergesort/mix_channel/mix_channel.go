@@ -1,8 +1,10 @@
-package workerpool
+package mix_channel
 
 import (
 	"mergesort/pkg/mergesort"
 )
+
+var Max int
 
 func MergeSort(l []int) []int {
 	n := len(l)
@@ -11,14 +13,14 @@ func MergeSort(l []int) []int {
 	}
 	mid := int(n / 2)
 
-	sem := make(chan int, 90)
-	if len(sem) < cap(sem) {
-		sem <- 1
+	sem := make(chan int, Max)
+	select {
+	case sem <- 1:
 		go func() {
 			l = asyncJob(mid, l)
 			<-sem
 		}()
-	} else {
+	default:
 		l = syncJob(mid, l)
 		// time.Sleep(10 * time.Nanosecond)
 	}
@@ -27,7 +29,7 @@ func MergeSort(l []int) []int {
 	for len(sem) != 0 {
 	}
 
-	close(sem)
+	//fmt.Println("sorted", l)
 	return l
 }
 

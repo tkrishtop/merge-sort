@@ -3,11 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	mergesort "mergesort/pkg"
-	"mergesort/pkg/mergesort/channel"
-	"mergesort/pkg/mergesort/synchronous"
-	"mergesort/pkg/mergesort/waitgroups"
-	"mergesort/pkg/mergesort/workerpool"
+	"mergesort/pkg/mergesort/mix_channel"
 	"time"
 )
 
@@ -23,34 +19,31 @@ func main() {
 	var lst = generateRandomArray(N)
 	fmt.Println("Testing on array of size", N)
 
-	type namedSortFunc struct {
-		name     string
-		function mergesort.SortFunc
-	}
+	// for workerpool_waitgroups.Max = 1; workerpool_waitgroups.Max < 20; workerpool_waitgroups.Max++ {
+	// 	start := time.Now()
+	// 	l := workerpool_waitgroups.MergeSort(lst)
+	// 	elapsed := time.Since(start)
+	// 	fmt.Println("result =", l)
+	// 	fmt.Println("MaxGorouties, elapsed time to sort with workerpool: ", workerpool_waitgroups.Max, elapsed)
+	// }
 
-	var sorters = []namedSortFunc{
-		{
-			name:     "synchronous",
-			function: synchronous.MergeSort,
-		},
-		{
-			name:     "channel",
-			function: channel.MergeSort,
-		},
-		{
-			name:     "waitgroups",
-			function: waitgroups.MergeSort,
-		},
-		{
-			name:     "workerpool",
-			function: workerpool.MergeSort,
-		},
-	}
+	// workerpool_waitgroups.Max = 4
+	// start := time.Now()
+	// workerpool_waitgroups.MergeSort(lst)
+	// elapsed := time.Since(start)
+	// fmt.Println("MaxGorouties, elapsed time to sort with workerpool_waitgroups: ", workerpool_waitgroups.Max, elapsed)
 
-	for _, sorter := range sorters {
+	// for mix_waitgroups.Max = 0; mix_waitgroups.Max < 50; mix_waitgroups.Max++ {
+	// 	start := time.Now()
+	// 	mix_waitgroups.MergeSort(lst)
+	// 	elapsed := time.Since(start)
+	// 	fmt.Println("MaxGorouties, elapsed time to sort with mix_waitgroups: ", mix_waitgroups.Max, elapsed)
+	// }
+
+	for mix_channel.Max = 0; mix_channel.Max < 50; mix_channel.Max++ {
 		start := time.Now()
-		sorter.function.MergeSort(lst)
+		mix_channel.MergeSort(lst)
 		elapsed := time.Since(start)
-		fmt.Println("Elapsed time to sort:", sorter.name, elapsed)
+		fmt.Println("MaxGorouties, elapsed time to sort with mix_channel: ", mix_channel.Max, elapsed)
 	}
 }
